@@ -115,13 +115,15 @@
     });
   }
 
-  function openConsentDialog(panelName) {
+  function openConsentDialog(panelName, moveFocus) {
     var dialog = document.getElementById("cookie-consent");
     if (!dialog) {
       return;
     }
 
-    lastFocusedElement = document.activeElement;
+    if (moveFocus) {
+      lastFocusedElement = document.activeElement;
+    }
     showPanel(panelName || "summary");
     dialog.hidden = false;
 
@@ -131,9 +133,11 @@
       toggle.checked = saved ? saved.marketing : false;
     }
 
-    var focusTarget = dialog.querySelector("[data-cookie-panel]:not([hidden]) h2");
-    if (focusTarget) {
-      focusTarget.focus();
+    if (moveFocus) {
+      var focusTarget = dialog.querySelector("[data-cookie-panel]:not([hidden]) h2");
+      if (focusTarget) {
+        focusTarget.focus();
+      }
     }
   }
 
@@ -147,6 +151,7 @@
     if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
       lastFocusedElement.focus();
     }
+    lastFocusedElement = null;
   }
 
   function renderConsentDialog() {
@@ -155,17 +160,19 @@
     container.className = "cookie-consent";
     container.hidden = true;
     container.innerHTML = [
-      '<div class="cookie-consent-card" role="dialog" aria-modal="true" aria-labelledby="cookie-summary-title">',
-      '  <section class="cookie-consent-panel" data-cookie-panel="summary">',
-      '    <h2 id="cookie-summary-title" tabindex="-1">Tu privacidad, tú decides</h2>',
-      '    <p>Usamos almacenamiento local necesario para recordar tu elección. Meta Pixel solo se carga si aceptas las cookies de marketing. Puedes rechazar sin que las imágenes, la navegación o los botones de WhatsApp dejen de funcionar. Consulta nuestra <a href="cookies.html">Política de Cookies</a>.</p>',
+      '<div class="cookie-consent-card" role="region" aria-label="Preferencias de cookies">',
+      '  <section class="cookie-consent-panel cookie-consent-summary" data-cookie-panel="summary">',
+      '    <div class="cookie-consent-copy">',
+      '      <h2 id="cookie-summary-title" tabindex="-1">Tu privacidad, tú decides</h2>',
+      '      <p>Meta Pixel solo se carga si aceptas Marketing. Puedes rechazar y seguir usando la web y WhatsApp. Consulta la <a href="cookies.html">Política de Cookies</a>.</p>',
+      '    </div>',
       '    <div class="cookie-consent-actions">',
       '      <button class="cookie-consent-button" type="button" data-cookie-action="accept">Aceptar todas</button>',
       '      <button class="cookie-consent-button" type="button" data-cookie-action="reject">Rechazar todas</button>',
       '      <button class="cookie-consent-button" type="button" data-cookie-action="configure">Configurar</button>',
       '    </div>',
       '  </section>',
-      '  <section class="cookie-consent-panel" data-cookie-panel="settings" hidden>',
+      '  <section class="cookie-consent-panel cookie-consent-settings" data-cookie-panel="settings" hidden>',
       '    <h2 id="cookie-settings-title" tabindex="-1">Configuración de cookies</h2>',
       '    <p>Elige qué tecnologías opcionales permites. Las funciones necesarias permanecen activas para guardar tu preferencia.</p>',
       '    <div class="cookie-consent-options">',
@@ -223,7 +230,7 @@
         return;
       }
       event.preventDefault();
-      openConsentDialog("settings");
+      openConsentDialog("settings", true);
     });
 
     document.addEventListener("keydown", function (event) {
@@ -260,7 +267,7 @@
       applyPreference(preference);
     } else {
       applyPreference({ marketing: false });
-      openConsentDialog("summary");
+      openConsentDialog("summary", false);
     }
   }
 
