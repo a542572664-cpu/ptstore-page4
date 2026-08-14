@@ -164,7 +164,7 @@
       '  <section class="cookie-consent-panel cookie-consent-summary" data-cookie-panel="summary">',
       '    <div class="cookie-consent-copy">',
       '      <h2 id="cookie-summary-title" tabindex="-1">Tu privacidad, tú decides</h2>',
-      '      <p>Meta Pixel solo se carga si aceptas Marketing. Puedes rechazar y seguir usando la web y WhatsApp. Consulta la <a href="cookies.html">Política de Cookies</a>.</p>',
+      '      <p>Meta Pixel solo se carga con tu permiso. Rechazar no afecta WhatsApp. <a href="cookies.html">Política de Cookies</a>.</p>',
       '    </div>',
       '    <div class="cookie-consent-actions">',
       '      <button class="cookie-consent-button" type="button" data-cookie-action="accept">Aceptar todas</button>',
